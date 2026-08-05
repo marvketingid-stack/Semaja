@@ -1,0 +1,52 @@
+---
+import { Image } from 'astro:assets';
+import { render } from 'astro:content';
+import type { CollectionEntry } from 'astro:content';
+import { blogIndexPath, useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { entry: CollectionEntry<'articles'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const { Content } = await render(entry);
+
+const words = entry.body ? entry.body.trim().split(/\s+/).length : 0;
+const minutes = Math.max(1, Math.round(words / 200));
+const df = new Intl.DateTimeFormat(lang === 'en' ? 'en-US' : 'id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<article class="post surface-ivory">
+  <div class="container-x post-head reveal">
+    <a href={blogIndexPath(lang)} class="post-back">← {t.blog.back}</a>
+    <p class="post-meta">{df.format(entry.data.pubDate)} · {minutes} {t.blog.minRead} · {entry.data.author}</p>
+    <h1 class="post-title">{entry.data.title}</h1>
+    <p class="post-desc">{entry.data.description}</p>
+  </div>
+
+  {entry.data.cover && (
+    <div class="container-x">
+      <div class="post-cover reveal">
+        <Image src={entry.data.cover} alt={entry.data.coverAlt} widths={[640, 960, 1280]} sizes="(min-width:900px) 900px, 100vw" format="webp" quality={74} class="post-cover-img" />
+      </div>
+    </div>
+  )}
+
+  <div class="container-x">
+    <div class="prose-semaja reveal">
+      <Content />
+    </div>
+    <div class="post-foot">
+      <a href={blogIndexPath(lang)} class="btn btn-ghost">{t.blog.back}</a>
+    </div>
+  </div>
+</article>
+
+<style>
+  .post { padding-top: clamp(4rem, 9vw, 6rem); padding-bottom: clamp(4rem, 10vw, 7rem); }
+  .post-head { max-width: 46rem; margin-inline: auto; text-align: center; }
+  .post-back { color: var(--color-gold-600); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.16em; }
+  .post-meta { margin-top: 1.6rem; font-size: 0.72rem; letter-spacing: 0.18em; text-transform: uppercase; color: var(--color-ink-soft); }
+  .post-title { font-size: clamp(2.2rem, 6vw, 3.6rem); color: var(--color-ink); margin: 0.8rem 0 0.9rem; }
+  .post-desc { color: var(--color-ink-soft); font-size: 1.2rem; font-weight: 300; max-width: 44ch; margin-inline: auto; }
+  .post-cover { max-width: 900px; margin: 2.8rem auto; border-radius: 2px; overflow: hidden; border: 1px solid rgba(28,25,18,0.12); }
+  .post-cover-img { width: 100%; height: auto; display: block; }
+  .post-foot { max-width: 46rem; margin: 3rem auto 0; text-align: center; }
+</style>

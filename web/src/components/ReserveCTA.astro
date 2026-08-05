@@ -1,0 +1,42 @@
+---
+import { Image } from 'astro:assets';
+import ReserveButton from './ReserveButton.astro';
+import Icon from './Icon.astro';
+import bg from '@/assets/photos/ambience-2.jpg';
+import { brand } from '@/data/site';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
+---
+<section class="reserve-band">
+  <div class="reserve-media">
+    <Image src={bg} alt="" aria-hidden="true" widths={[720, 1080, 1600]} sizes="100vw" format="webp" quality={64} class="reserve-img" />
+    <div class="reserve-scrim"></div>
+  </div>
+  <div class="container-x reserve-content reveal">
+    <p class="eyebrow">{t.reserve.eyebrow}</p>
+    <h2 class="reserve-title">{t.reserve.title}</h2>
+    <p class="reserve-sub">{t.reserve.sub}</p>
+    <div class="reserve-actions">
+      <ReserveButton lang={lang} label={t.reserve.cta} section="midpage" />
+      <a href={telHref} class="btn btn-ghost" data-track="cta_click" data-section="midpage" data-cta-label="call_us">
+        <Icon name="phone" class="w-5 h-5" />
+        <span>{t.reserve.call}</span>
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .reserve-band { position: relative; padding-block: clamp(4.5rem, 12vw, 8rem); overflow: hidden; text-align: center; }
+  .reserve-media { position: absolute; inset: 0; z-index: 0; }
+  .reserve-img { width: 100%; height: 100%; object-fit: cover; }
+  .reserve-scrim { position: absolute; inset: 0; background: color-mix(in srgb, var(--color-forest-950) 78%, transparent); }
+  .reserve-content { position: relative; z-index: 1; }
+  .reserve-title { font-size: clamp(2rem, 6vw, 3.4rem); color: var(--color-cream-50); margin: 0.5rem 0 0.6rem; }
+  .reserve-sub { color: var(--color-cream-200); }
+  .reserve-actions { margin-top: 1.8rem; display: flex; flex-wrap: wrap; gap: 0.8rem; justify-content: center; }
+</style>

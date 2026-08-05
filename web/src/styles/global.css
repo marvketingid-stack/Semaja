@@ -1,0 +1,227 @@
+@import "tailwindcss";
+
+/* ============================================================
+   SEMAJA — Design tokens (dari logo: hijau tua + emas)
+   Tipografi editorial: Cormorant Garamond (display) + Jost (teks)
+   ============================================================ */
+@theme {
+  /* Brand */
+  --color-forest-950: #06231f;
+  --color-forest-900: #0a342e;
+  --color-forest-800: #0e4a42;   /* warna badge logo */
+  --color-forest-700: #135a50;
+  --color-forest-600: #1c6f63;
+
+  --color-gold-600: #b6863b;
+  --color-gold-500: #c79a4b;      /* emas logo */
+  --color-gold-400: #d8b571;
+  --color-gold-300: #e6cd9a;
+
+  --color-cream-50: #faf7f0;
+  --color-cream-100: #f3ecdd;
+  --color-cream-200: #e7dcc6;
+
+  --color-ivory: #f6f1e7;         /* section terang */
+  --color-ivory-deep: #efe7d7;
+  --color-ink: #1c1912;           /* teks di atas ivory */
+  --color-ink-soft: #4a4436;
+
+  /* Fonts */
+  --font-display: "Cormorant Garamond", Georgia, "Times New Roman", serif;
+  --font-body: "Jost Variable", ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+
+  /* Easing */
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+/* ---------- Base ---------- */
+:root {
+  color-scheme: dark;
+  --header-h: 72px;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: var(--header-h);
+  -webkit-text-size-adjust: 100%;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after { animation-duration: 0.001ms !important; transition-duration: 0.001ms !important; }
+}
+
+body {
+  margin: 0;
+  background-color: var(--color-forest-950);
+  color: var(--color-cream-100);
+  font-family: var(--font-body);
+  font-size: 1rem;
+  font-weight: 300;
+  line-height: 1.65;
+  letter-spacing: 0.01em;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4 {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.02;
+  letter-spacing: 0.005em;
+}
+
+img { max-width: 100%; height: auto; display: block; }
+a { color: inherit; text-decoration: none; }
+
+::selection { background: var(--color-gold-500); color: var(--color-forest-950); }
+
+:where(a, button, [tabindex]):focus-visible {
+  outline: 2px solid var(--color-gold-400);
+  outline-offset: 3px;
+  border-radius: 4px;
+}
+
+/* ============================================================
+   Layout helpers
+   ============================================================ */
+.container-x { width: 100%; max-width: 1220px; margin-inline: auto; padding-inline: 1.25rem; }
+@media (min-width: 768px) { .container-x { padding-inline: 2.5rem; } }
+
+.section { padding-block: clamp(4.5rem, 11vw, 8.5rem); position: relative; }
+
+/* ----- Surfaces (ritme terang/gelap ala editorial) ----- */
+.surface-forest {
+  background: var(--color-forest-950);
+  color: var(--color-cream-100);
+}
+.surface-forest-alt {
+  background: linear-gradient(180deg, var(--color-forest-900), var(--color-forest-950));
+  color: var(--color-cream-100);
+}
+.surface-ivory {
+  background: var(--color-ivory);
+  color: var(--color-ink);
+}
+.surface-ivory h1, .surface-ivory h2, .surface-ivory h3, .surface-ivory h4 { color: var(--color-ink); }
+
+/* ============================================================
+   Typographic system
+   ============================================================ */
+.font-display { font-family: var(--font-display); }
+
+/* Display headings — Cormorant besar & anggun */
+.display {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 1.0;
+  letter-spacing: 0.005em;
+  font-size: clamp(2.4rem, 6vw, 4rem);
+}
+.display-lg {
+  font-family: var(--font-display);
+  font-weight: 500;
+  line-height: 0.98;
+  font-size: clamp(3rem, 9vw, 6rem);
+}
+.lede {
+  font-size: clamp(1.05rem, 2.4vw, 1.3rem);
+  line-height: 1.7;
+  font-weight: 300;
+}
+
+/* Eyebrow — Jost, tracked, dengan garis */
+.eyebrow {
+  font-family: var(--font-body);
+  text-transform: uppercase;
+  letter-spacing: 0.34em;
+  font-size: 0.7rem;
+  font-weight: 500;
+  color: var(--color-gold-500);
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+}
+.eyebrow::before {
+  content: "";
+  width: 1.6rem; height: 1px;
+  background: currentColor;
+  opacity: 0.7;
+}
+.eyebrow--plain::before { display: none; }
+.surface-ivory .eyebrow { color: var(--color-gold-600); }
+
+/* Nomor indeks section (01 / 02 …) */
+.index-num {
+  font-family: var(--font-display);
+  font-size: clamp(0.9rem, 1.6vw, 1.05rem);
+  letter-spacing: 0.3em;
+  color: var(--color-gold-500);
+  opacity: 0.8;
+}
+
+/* Garis emas tipis */
+.rule-gold {
+  height: 1px;
+  background: linear-gradient(90deg, var(--color-gold-500), transparent);
+  opacity: 0.6;
+}
+
+/* ============================================================
+   Buttons
+   ============================================================ */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.55rem;
+  min-height: 50px;
+  padding: 0.8rem 1.7rem;
+  border-radius: 2px;                 /* sudut tajam = lebih editorial */
+  font-family: var(--font-body);
+  font-weight: 400;
+  font-size: 0.82rem;
+  text-transform: uppercase;
+  letter-spacing: 0.16em;
+  transition: transform 0.35s var(--ease-out-soft), background-color 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s;
+  will-change: transform;
+}
+.btn-primary {
+  background: var(--color-gold-500);
+  color: var(--color-forest-950);
+  box-shadow: 0 10px 34px -12px rgba(199, 154, 75, 0.6);
+}
+.btn-primary:hover { background: var(--color-gold-400); transform: translateY(-2px); }
+.btn-ghost {
+  background: transparent;
+  color: var(--color-cream-50);
+  border: 1px solid rgba(230, 205, 154, 0.45);
+}
+.btn-ghost:hover { border-color: var(--color-gold-400); background: rgba(230, 205, 154, 0.08); }
+.surface-ivory .btn-ghost { color: var(--color-ink); border-color: rgba(28, 25, 18, 0.28); }
+.surface-ivory .btn-ghost:hover { border-color: var(--color-gold-600); background: rgba(182, 134, 59, 0.08); }
+
+/* ============================================================
+   Reveal on scroll
+   ============================================================ */
+.reveal { opacity: 0; transform: translateY(26px); transition: opacity 0.8s var(--ease-out-soft), transform 0.8s var(--ease-out-soft); }
+.reveal.is-visible { opacity: 1; transform: none; }
+.no-js .reveal { opacity: 1; transform: none; }
+
+/* ============================================================
+   Prose (artikel / jurnal) — di atas ivory
+   ============================================================ */
+.prose-semaja { max-width: 44rem; margin-inline: auto; font-weight: 300; }
+.prose-semaja p { margin: 1.2em 0; color: var(--color-ink-soft); font-size: 1.12rem; line-height: 1.8; }
+.prose-semaja h2 { font-family: var(--font-display); font-size: clamp(1.8rem, 4vw, 2.4rem); margin: 1.7em 0 0.4em; color: var(--color-ink); }
+.prose-semaja h3 { font-family: var(--font-display); font-size: clamp(1.4rem, 3vw, 1.7rem); margin: 1.5em 0 0.4em; color: var(--color-ink); }
+.prose-semaja a { color: var(--color-gold-600); text-decoration: underline; text-underline-offset: 3px; }
+.prose-semaja ul, .prose-semaja ol { margin: 1.1em 0; padding-left: 1.4em; color: var(--color-ink-soft); }
+.prose-semaja li { margin: 0.4em 0; }
+.prose-semaja img { border-radius: 2px; margin: 2em auto; }
+.prose-semaja blockquote {
+  border-left: 2px solid var(--color-gold-500);
+  padding-left: 1.3rem; margin: 1.6em 0;
+  font-family: var(--font-display); font-size: 1.4rem; font-style: italic; color: var(--color-ink);
+}

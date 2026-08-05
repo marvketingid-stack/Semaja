@@ -1,0 +1,43 @@
+---
+import { getCollection } from 'astro:content';
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Header from '@/components/Header.astro';
+import Footer from '@/components/Footer.astro';
+import ArticlePost from '@/components/ArticlePost.astro';
+import { SITE_URL, brand } from '@/data/site';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('articles', (e) => e.data.lang === 'en' && !e.data.draft);
+  return posts.map((entry) => ({ params: { slug: entry.id }, props: { entry } }));
+}
+
+const { entry } = Astro.props;
+const lang = 'en' as const;
+const pathEn = `/articles/${entry.id}`;
+
+const jsonLd = {
+  '@context': 'https://schema.org',
+  '@type': 'Article',
+  headline: entry.data.title,
+  description: entry.data.description,
+  datePublished: entry.data.pubDate.toISOString(),
+  dateModified: (entry.data.updatedDate ?? entry.data.pubDate).toISOString(),
+  author: { '@type': 'Organization', name: entry.data.author || brand.name },
+  publisher: { '@type': 'Organization', name: brand.name },
+  inLanguage: 'en-US',
+  mainEntityOfPage: new URL(pathEn, SITE_URL).toString(),
+};
+---
+<BaseLayout
+  lang={lang}
+  title={`${entry.data.title} — ${brand.name}`}
+  description={entry.data.description}
+  pathId={pathEn}
+  pathEn={pathEn}
+  type="article"
+  jsonLd={jsonLd}
+>
+  <Header lang={lang} />
+  <main id="main"><ArticlePost entry={entry} lang={lang} /></main>
+  <Footer lang={lang} />
+</BaseLayout>

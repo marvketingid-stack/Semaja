@@ -1,0 +1,28 @@
+---
+import Icon from './Icon.astro';
+import { waLink } from '@/data/site';
+import type { Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+  label: string;
+  section: string;            // header | hero | midpage | footer | sticky
+  variant?: 'primary' | 'ghost';
+  class?: string;
+  showIcon?: boolean;
+}
+const { lang, label, section, variant = 'primary', class: className = '', showIcon = true } = Astro.props;
+---
+<a
+  href={waLink(lang)}
+  target="_blank"
+  rel="noopener"
+  class={`btn ${variant === 'primary' ? 'btn-primary' : 'btn-ghost'} ${className}`}
+  data-track="cta_click"
+  data-section={section}
+  data-cta-label="reserve_whatsapp"
+  data-lang={lang}
+>
+  {showIcon && <Icon name="whatsapp" class="w-5 h-5" />}
+  <span>{label}</span>
+</a>

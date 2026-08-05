@@ -1,0 +1,66 @@
+---
+import { Image } from 'astro:assets';
+import { useTranslations, type Lang } from '@/i18n/ui';
+import mainHall from '@/assets/photos/ambience-3.jpg';
+import garden from '@/assets/photos/hero-spread.jpg';
+import vip from '@/assets/photos/dining-social.jpg';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const imgs = [mainHall, garden, vip];
+const areas = t.space.areas.map((a, i) => ({ ...a, img: imgs[i] }));
+---
+<section id="space" class="section surface-ivory space">
+  <div class="container-x">
+    <header class="space-head reveal">
+      <div class="space-head-row">
+        <span class="index-num">03</span>
+        <p class="eyebrow">{t.space.eyebrow}</p>
+      </div>
+      <h2 class="space-title">{t.space.title}</h2>
+      <p class="space-sub lede">{t.space.sub}</p>
+    </header>
+
+    <div class="space-row">
+      {areas.map((a, i) => (
+        <article class="space-card reveal" style={`transition-delay:${i * 0.08}s`}>
+          <div class="space-media">
+            <Image src={a.img} alt={a.name} widths={[420, 640, 840]} sizes="(min-width:900px) 32vw, 80vw" format="webp" quality={70} class="space-img" />
+          </div>
+          <div class="space-info">
+            <h3 class="space-name">{a.name}</h3>
+            <p class="space-desc">{a.desc}</p>
+          </div>
+        </article>
+      ))}
+    </div>
+  </div>
+</section>
+
+<style>
+  .space-head { max-width: 46ch; }
+  .space-head-row { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.4rem; }
+  .space-title { font-size: clamp(2.2rem, 5.4vw, 3.6rem); margin: 0 0 1rem; }
+  .space-sub { color: var(--color-ink-soft); }
+  .space-row {
+    margin-top: 2.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: 82%;
+    gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 0.6rem; margin-inline: -1.25rem; padding-inline: 1.25rem;
+    scrollbar-width: none;
+  }
+  .space-row::-webkit-scrollbar { display: none; }
+  .space-card { scroll-snap-align: start; border-radius: 16px; overflow: hidden; position: relative; }
+  .space-media { aspect-ratio: 3/4; }
+  .space-img { width: 100%; height: 100%; object-fit: cover; }
+  .space-info {
+    position: absolute; inset: auto 0 0 0; padding: 1.4rem 1.2rem 1.2rem;
+    background: linear-gradient(to top, rgba(6,35,31,0.92), transparent);
+  }
+  .space-name { font-size: 1.35rem; color: var(--color-gold-300); }
+  .space-desc { margin-top: 0.3rem; font-size: 0.9rem; color: var(--color-cream-100); max-width: 34ch; }
+  @media (min-width: 900px) {
+    .space-row { grid-auto-flow: unset; grid-template-columns: repeat(3, 1fr); grid-auto-columns: unset; overflow: visible; margin-inline: 0; padding-inline: 0; gap: 1.4rem; }
+    .space-media { aspect-ratio: 4/5; }
+  }
+</style>

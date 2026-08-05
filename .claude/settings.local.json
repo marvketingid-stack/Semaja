@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(npm -v)",
+      "Bash(npx --version)",
+      "Bash(git --version)",
+      "Bash(mkdir -p web/src/assets/photos web/src/assets/brand web/public/fonts web/public/admin)",
+      "Bash(cp '__TRACKED_VAR__/Copy of DSC01113.JPG' web/src/assets/photos/hero-spread.jpg)",
+      "Bash(cp '__TRACKED_VAR__/Copy of DSC01204.JPG' web/src/assets/photos/dining-social.jpg)",
+      "Bash(cp '__TRACKED_VAR__/Copy of DSC01152.JPG' web/src/assets/photos/ambience-1.jpg)",
+      "Bash(cp '__TRACKED_VAR__/Copy of DSC01180.JPG' web/src/assets/photos/ambience-2.jpg)",
+      "Bash(npm install *)",
+      "Bash(npm run *)",
+      "Read(//c/Users/agasi/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/2e3722af-2c99-4ade-8edd-8ff264ed841a/f10c257a-e9d5-40be-b3d2-7ced4f955884/skills/ui-ux-pro-max/**)",
+      "Bash(python scripts/search.py \"elegant luxury restaurant fine dining timeless\" --domain typography -n 6)"
+    ]
+  }
+}

@@ -1,0 +1,30 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+---
+<BaseLayout
+  lang="en"
+  title="Page not found — Semaja"
+  description="The page you are looking for could not be found."
+  pathId="/404"
+  pathEn="/404"
+  noindex={true}
+>
+  <main id="main" class="nf">
+    <div class="container-x nf-inner">
+      <p class="eyebrow eyebrow--plain">404</p>
+      <h1 class="nf-title">Page not found</h1>
+      <p class="nf-sub">It seems this dish is off the menu. Let’s head back to the main table.</p>
+      <div class="nf-cta">
+        <a href="/" class="btn btn-primary">Back to Home</a>
+        <a href="/articles" class="btn btn-ghost">Journal</a>
+      </div>
+    </div>
+  </main>
+</BaseLayout>
+
+<style>
+  .nf { min-height: 80vh; display: grid; place-items: center; text-align: center; }
+  .nf-title { font-size: clamp(2rem, 7vw, 3.4rem); color: var(--color-cream-50); margin: 0.6rem 0 0.6rem; }
+  .nf-sub { color: var(--color-cream-200); max-width: 40ch; margin-inline: auto; }
+  .nf-cta { margin-top: 1.6rem; display: flex; gap: 0.8rem; justify-content: center; flex-wrap: wrap; }
+</style>

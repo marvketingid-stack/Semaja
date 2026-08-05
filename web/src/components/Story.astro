@@ -1,0 +1,49 @@
+---
+import { Image } from 'astro:assets';
+import chefImg from '@/assets/photos/chef-fire.jpg';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const titleLines = t.story.title.split('\n');
+---
+<section id="story" class="section surface-ivory story">
+  <div class="container-x story-grid">
+    <div class="story-media reveal">
+      <Image src={chefImg} alt={t.story.chefCaption} widths={[480, 720, 960]} sizes="(min-width:768px) 45vw, 90vw" format="webp" quality={74} class="story-img" />
+      <span class="story-caption">{t.story.chefCaption}</span>
+    </div>
+    <div class="story-text reveal">
+      <div class="story-eyebrow-row">
+        <span class="index-num">01</span>
+        <p class="eyebrow">{t.story.eyebrow}</p>
+      </div>
+      <h2 class="story-title">
+        {titleLines.map((l, i) => <span class="block">{l}{i < titleLines.length - 1 ? <br /> : null}</span>)}
+      </h2>
+      <p class="story-body lede">{t.story.body}</p>
+      <div class="rule-gold" style="max-width:200px;margin:1.8rem 0 1.2rem"></div>
+      <p class="story-badge">{t.story.badge}</p>
+    </div>
+  </div>
+</section>
+
+<style>
+  .story-grid { display: grid; gap: 2.5rem; align-items: center; }
+  .story-media { position: relative; }
+  .story-img { width: 100%; border-radius: 2px; box-shadow: 0 40px 70px -40px rgba(28,25,18,.5); aspect-ratio: 4/5; object-fit: cover; }
+  .story-caption {
+    position: absolute; left: 1rem; bottom: 1rem;
+    background: color-mix(in srgb, var(--color-forest-950) 82%, transparent);
+    color: var(--color-gold-300); font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.18em;
+    padding: 0.5rem 0.9rem; border-radius: 2px; backdrop-filter: blur(6px);
+  }
+  .story-eyebrow-row { display: flex; align-items: center; gap: 1.2rem; margin-bottom: 1.4rem; }
+  .story-title { font-size: clamp(2.2rem, 5.4vw, 3.6rem); margin: 0 0 1.4rem; }
+  .story-body { color: var(--color-ink-soft); max-width: 54ch; }
+  .story-badge { color: var(--color-gold-600); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.18em; }
+  @media (min-width: 768px) {
+    .story-grid { grid-template-columns: 0.85fr 1.15fr; gap: 4.5rem; }
+  }
+</style>

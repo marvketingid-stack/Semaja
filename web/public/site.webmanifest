@@ -1,0 +1,13 @@
+{
+  "name": "Semaja — Modern Indonesian",
+  "short_name": "Semaja",
+  "description": "Restoran Indonesia modern di Menteng, Jakarta. by Ismaya Group.",
+  "start_url": "/",
+  "display": "standalone",
+  "background_color": "#06231f",
+  "theme_color": "#0a342e",
+  "icons": [
+    { "src": "/favicon.png", "sizes": "256x256", "type": "image/png" },
+    { "src": "/favicon.png", "sizes": "512x512", "type": "image/png" }
+  ]
+}

@@ -1,0 +1,166 @@
+---
+/**
+ * Tracking stack (PRD Section 6). Ditempatkan di <head>.
+ * - Semua event masuk ke dataLayer (GTM sebagai router utama).
+ * - Jika GTM ID kosong, GA4/Pixel/Clarity dimuat langsung sebagai fallback.
+ * - Menangkap fbclid/fbc/fbp + UTM, meneruskannya ke pesan WA & webhook GHL.
+ * ID diambil dari environment variable (lihat src/data/site.ts).
+ */
+import { tracking } from '@/data/site';
+const { gtmId, ga4Id, metaPixelId, clarityId, ghlWebhook } = tracking;
+---
+<!-- dataLayer + capture atribusi (selalu aktif) -->
+<script is:inline define:vars={{ gtmId, ga4Id, metaPixelId, clarityId, ghlWebhook }}>
+  window.dataLayer = window.dataLayer || [];
+  document.documentElement.classList.remove('no-js');
+
+  /* ---------- 1. Tangkap fbclid / UTM saat landing ---------- */
+  (function captureAttribution() {
+    try {
+      var p = new URLSearchParams(location.search);
+      var store = JSON.parse(localStorage.getItem('semaja_attrib') || '{}');
+      ['utm_source','utm_medium','utm_campaign','utm_content','utm_term','fbclid','gclid'].forEach(function (k) {
+        if (p.get(k)) store[k] = p.get(k);
+      });
+      // Bangun cookie _fbc dari fbclid (format Meta) bila belum ada.
+      if (store.fbclid && !document.cookie.includes('_fbc=')) {
+        var fbc = 'fb.1.' + Date.now() + '.' + store.fbclid;
+        document.cookie = '_fbc=' + fbc + ';path=/;max-age=7776000';
+        store._fbc = fbc;
+      }
+      if (!document.cookie.includes('_fbp=')) {
+        var fbp = 'fb.1.' + Date.now() + '.' + Math.floor(Math.random() * 1e10);
+        document.cookie = '_fbp=' + fbp + ';path=/;max-age=7776000';
+        store._fbp = fbp;
+      }
+      store.landing_lang = document.documentElement.lang || 'id';
+      localStorage.setItem('semaja_attrib', JSON.stringify(store));
+      window.__semajaAttrib = store;
+    } catch (e) {}
+  })();
+
+  /* ---------- 2. Sisipkan atribusi ke pesan WhatsApp pre-filled ---------- */
+  window.addEventListener('DOMContentLoaded', function () {
+    try {
+      var a = window.__semajaAttrib || {};
+      var ref = [a.utm_campaign, a.utm_content, (a.fbclid || '').slice(0, 12)].filter(Boolean).join('/');
+      if (!ref) return;
+      document.querySelectorAll('a[data-cta-label="reserve_whatsapp"]').forEach(function (el) {
+        var url = new URL(el.href);
+        var t = url.searchParams.get('text') || '';
+        url.searchParams.set('text', t + '\n\n(ref: ' + ref + ')');
+        el.href = url.toString();
+      });
+    } catch (e) {}
+  });
+
+  /* ---------- 3. Helper: kirim event ke dataLayer (+ GHL lead) ---------- */
+  function semajaTrack(name, data) {
+    var lang = document.documentElement.lang || 'id';
+    var payload = Object.assign({ event: name, content_language: lang }, data || {});
+    // event_id untuk dedup Pixel <-> CAPI (PRD 6.3).
+    payload.event_id = name + '-' + Date.now() + '-' + Math.floor(Math.random() * 1e6);
+    window.dataLayer.push(payload);
+    return payload;
+  }
+  window.semajaTrack = semajaTrack;
+
+  /* ---------- 4. Delegasi klik untuk semua CTA ber-atribut ---------- */
+  document.addEventListener('click', function (e) {
+    var el = e.target.closest('[data-track]');
+    if (!el) return;
+    var evtName = el.getAttribute('data-track'); // cta_click, directions_click, language_switch, dst.
+    var payload = semajaTrack(evtName, {
+      section: el.getAttribute('data-section') || '',
+      cta_label: el.getAttribute('data-cta-label') || '',
+    });
+    // Kirim lead ke GoHighLevel (PRD 6.5) saat klik reservasi WhatsApp.
+    if (el.getAttribute('data-cta-label') === 'reserve_whatsapp' && ghlWebhook) {
+      try {
+        var a = window.__semajaAttrib || {};
+        var body = JSON.stringify({
+          source: 'landing_wa_click',
+          section: payload.section,
+          event_id: payload.event_id,
+          content_language: payload.content_language,
+          fbclid: a.fbclid || '', fbc: a._fbc || '', fbp: a._fbp || '',
+          utm_source: a.utm_source || '', utm_campaign: a.utm_campaign || '',
+          utm_content: a.utm_content || '', page: location.href,
+        });
+        if (navigator.sendBeacon) navigator.sendBeacon(ghlWebhook, new Blob([body], { type: 'application/json' }));
+      } catch (err) {}
+    }
+  });
+
+  /* ---------- 5. Scroll depth 25/50/75/100 + ViewContent ---------- */
+  (function scrollDepth() {
+    var marks = [25, 50, 75, 100], hit = {};
+    function onScroll() {
+      var h = document.documentElement;
+      var pct = ((h.scrollTop || document.body.scrollTop) + h.clientHeight) / h.scrollHeight * 100;
+      marks.forEach(function (m) {
+        if (!hit[m] && pct >= m) {
+          hit[m] = true;
+          semajaTrack('scroll_depth', { percent: m });
+          if (m === 25) semajaTrack('ViewContent', {});
+        }
+      });
+      if (hit[100]) window.removeEventListener('scroll', onScroll);
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+  })();
+
+  /* ---------- 6. menu_gallery_view saat section Signature terlihat ---------- */
+  window.addEventListener('DOMContentLoaded', function () {
+    var target = document.getElementById('menu');
+    if (!target || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) {
+        if (en.isIntersecting) { semajaTrack('menu_gallery_view', {}); io.disconnect(); }
+      });
+    }, { threshold: 0.3 });
+    io.observe(target);
+  });
+</script>
+
+<!-- Google Tag Manager (router utama) -->
+{gtmId && (
+  <script is:inline define:vars={{ gtmId }}>
+    (function (w, d, s, l, i) {
+      w[l] = w[l] || []; w[l].push({ 'gtm.start': new Date().getTime(), event: 'gtm.js' });
+      var f = d.getElementsByTagName(s)[0], j = d.createElement(s), dl = l != 'dataLayer' ? '&l=' + l : '';
+      j.async = true; j.src = 'https://www.googletagmanager.com/gtm.js?id=' + i + dl;
+      f.parentNode.insertBefore(j, f);
+    })(window, document, 'script', 'dataLayer', gtmId);
+  </script>
+)}
+
+<!-- Fallback langsung bila GTM belum dikonfigurasi -->
+{!gtmId && ga4Id && (
+  <>
+    <script is:inline async src={`https://www.googletagmanager.com/gtag/js?id=${ga4Id}`}></script>
+    <script is:inline define:vars={{ ga4Id }}>
+      function gtag() { dataLayer.push(arguments); }
+      gtag('js', new Date()); gtag('config', ga4Id);
+    </script>
+  </>
+)}
+{!gtmId && metaPixelId && (
+  <script is:inline define:vars={{ metaPixelId }}>
+    !(function (f, b, e, v, n, t, s) {
+      if (f.fbq) return; n = f.fbq = function () { n.callMethod ? n.callMethod.apply(n, arguments) : n.queue.push(arguments); };
+      if (!f._fbq) f._fbq = n; n.push = n; n.loaded = !0; n.version = '2.0'; n.queue = [];
+      t = b.createElement(e); t.async = !0; t.src = v; s = b.getElementsByTagName(e)[0]; s.parentNode.insertBefore(t, s);
+    })(window, document, 'script', 'https://connect.facebook.net/en_US/fbevents.js');
+    fbq('init', metaPixelId); fbq('track', 'PageView');
+  </script>
+)}
+{clarityId && (
+  <script is:inline define:vars={{ clarityId }}>
+    (function (c, l, a, r, i, t, y) {
+      c[a] = c[a] || function () { (c[a].q = c[a].q || []).push(arguments); };
+      t = l.createElement(r); t.async = 1; t.src = 'https://www.clarity.ms/tag/' + i;
+      y = l.getElementsByTagName(r)[0]; y.parentNode.insertBefore(t, y);
+    })(window, document, 'clarity', 'script', clarityId);
+  </script>
+)}

@@ -1,0 +1,30 @@
+---
+import Header from './Header.astro';
+import Hero from './Hero.astro';
+import Story from './Story.astro';
+import Dishes from './Dishes.astro';
+import Space from './Space.astro';
+import SocialProof from './SocialProof.astro';
+import ReserveCTA from './ReserveCTA.astro';
+import Location from './Location.astro';
+import Faq from './Faq.astro';
+import Footer from './Footer.astro';
+import StickyReserve from './StickyReserve.astro';
+import type { Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+---
+<Header lang={lang} />
+<main id="main">
+  <Hero lang={lang} />
+  <Story lang={lang} />
+  <Dishes lang={lang} />
+  <Space lang={lang} />
+  <SocialProof lang={lang} />
+  <ReserveCTA lang={lang} />
+  <Location lang={lang} />
+  <Faq lang={lang} />
+</main>
+<Footer lang={lang} />
+<StickyReserve lang={lang} />

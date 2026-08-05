@@ -1,0 +1,107 @@
+---
+import Icon from './Icon.astro';
+import ReserveButton from './ReserveButton.astro';
+import { brand } from '@/data/site';
+import { useTranslations, homePath, blogIndexPath, type Lang } from '@/i18n/ui';
+
+interface Props {
+  lang: Lang;
+}
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const home = homePath(lang);
+
+const nav = [
+  { href: `${home}#story`, label: t.nav.story },
+  { href: `${home}#menu`, label: t.nav.dishes },
+  { href: `${home}#space`, label: t.nav.space },
+  { href: `${home}#location`, label: t.nav.location },
+  { href: blogIndexPath(lang), label: t.nav.journal },
+];
+const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
+---
+<header class="site-header">
+  <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
+  <div class="container-x header-inner">
+    <a href={home} class="brand" aria-label="Semaja — beranda">
+      <span class="brand-name font-display">SEMAJA</span>
+      <span class="brand-tag">Modern Indonesian</span>
+    </a>
+
+    <nav class="nav-desktop" aria-label="Utama">
+      {nav.map((n) => <a href={n.href} class="nav-link">{n.label}</a>)}
+    </nav>
+
+    <div class="header-right">
+      <a href={telHref} class="header-phone" aria-label={brand.phoneDisplay} data-track="phone_click" data-section="header">
+        <Icon name="phone" class="w-5 h-5" />
+      </a>
+      <div class="header-cta"><ReserveButton lang={lang} label={t.nav.reserve} section="header" /></div>
+      <label for="nav-toggle" class="nav-burger" aria-label={t.common.menuOpen}>
+        <Icon name="menu" class="w-6 h-6 icon-open" />
+        <Icon name="close" class="w-6 h-6 icon-close" />
+      </label>
+    </div>
+  </div>
+
+  <!-- Panel menu mobile -->
+  <div class="nav-mobile">
+    <nav class="container-x" aria-label="Mobile">
+      {nav.map((n) => <a href={n.href} class="nav-mobile-link"><label for="nav-toggle" style="display:contents">{n.label}</label></a>)}
+      <div class="nav-mobile-cta"><ReserveButton lang={lang} label={t.nav.reserve} section="header" class="w-full" /></div>
+    </nav>
+  </div>
+</header>
+
+<style>
+  .site-header {
+    position: sticky; top: 0; z-index: 50;
+    background: color-mix(in srgb, var(--color-forest-950) 82%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid rgba(230, 205, 154, 0.12);
+    padding-top: env(safe-area-inset-top);
+  }
+  .header-inner { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); gap: 1rem; }
+  .brand { display: flex; flex-direction: column; line-height: 1; }
+  .brand-name { font-size: 1.7rem; font-weight: 600; letter-spacing: 0.32em; text-indent: 0.32em; color: var(--color-gold-400); }
+  .brand-tag { font-size: 0.54rem; letter-spacing: 0.42em; text-indent: 0.42em; text-transform: uppercase; color: var(--color-cream-200); margin-top: 4px; }
+
+  .nav-desktop { display: none; gap: 2rem; }
+  .nav-link { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-cream-100); opacity: 0.8; transition: color .2s, opacity .2s; }
+  .nav-link:hover { color: var(--color-gold-400); opacity: 1; }
+
+  .header-right { display: flex; align-items: center; gap: 0.75rem; }
+  .lang-switch { display: inline-flex; align-items: center; gap: 2px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; }
+  .lang-current { color: var(--color-gold-400); padding: 4px 6px; }
+  .lang-alt { color: var(--color-cream-200); opacity: 0.6; padding: 4px 6px; border-radius: 6px; }
+  .lang-alt:hover { opacity: 1; color: var(--color-gold-400); }
+
+  .header-phone { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; color: var(--color-cream-100); border-radius: 999px; }
+  .header-phone:hover { color: var(--color-gold-400); }
+  .header-cta { display: none; }
+
+  .nav-burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; color: var(--color-cream-50); }
+  .nav-burger .icon-close { display: none; }
+
+  .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
+  .nav-mobile {
+    display: grid; grid-template-rows: 0fr; overflow: hidden;
+    transition: grid-template-rows .35s var(--ease-out-soft);
+    background: var(--color-forest-950);
+    border-bottom: 1px solid rgba(230,205,154,.12);
+  }
+  .nav-mobile > nav { min-height: 0; display: flex; flex-direction: column; }
+  .nav-mobile-link { padding: 0.95rem 0; font-size: 1.05rem; border-bottom: 1px solid rgba(230,205,154,.08); color: var(--color-cream-50); }
+  .nav-mobile-cta { padding: 1.1rem 0 calc(1.1rem + env(safe-area-inset-bottom)); }
+
+  .nav-toggle:checked ~ .nav-mobile { grid-template-rows: 1fr; }
+  .nav-toggle:checked ~ .container-x .nav-burger .icon-open { display: none; }
+  .nav-toggle:checked ~ .container-x .nav-burger .icon-close { display: inline-flex; }
+
+  @media (min-width: 900px) {
+    .nav-desktop { display: flex; }
+    .header-phone, .header-cta { display: inline-flex; }
+    .nav-burger { display: none; }
+    .nav-mobile { display: none; }
+  }
+</style>

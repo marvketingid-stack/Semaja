@@ -1,0 +1,38 @@
+---
+import ReserveButton from './ReserveButton.astro';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<!-- Bar reservasi mobile (selalu di bawah layar) -->
+<div class="sticky-reserve-bar">
+  <ReserveButton lang={lang} label={t.common.reserve} section="sticky" class="w-full" />
+</div>
+
+<!-- Pil reservasi mengambang untuk desktop (selalu terlihat) -->
+<div class="sticky-reserve-float">
+  <ReserveButton lang={lang} label={t.common.reserve} section="sticky_float" />
+</div>
+
+<style>
+  .sticky-reserve-bar {
+    position: fixed; left: 0; right: 0; bottom: 0; z-index: 45;
+    padding: 0.7rem 1rem calc(0.7rem + env(safe-area-inset-bottom));
+    background: color-mix(in srgb, var(--color-forest-950) 90%, transparent);
+    backdrop-filter: blur(10px);
+    border-top: 1px solid rgba(230,205,154,0.15);
+  }
+  .sticky-reserve-float { display: none; }
+
+  @media (min-width: 900px) {
+    .sticky-reserve-bar { display: none; }
+    .sticky-reserve-float {
+      display: block; position: fixed; right: 1.6rem; bottom: 1.6rem; z-index: 45;
+    }
+    .sticky-reserve-float :global(.btn) {
+      box-shadow: 0 14px 40px -10px rgba(0,0,0,0.6), 0 8px 30px -8px rgba(199,154,75,0.5);
+    }
+  }
+</style>

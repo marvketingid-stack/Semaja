@@ -1,0 +1,65 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import badge from '@/assets/brand/logo-badge.png';
+import { brand, waLink } from '@/data/site';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+const year = new Date().getFullYear();
+---
+<footer class="footer">
+  <div class="rule-gold"></div>
+  <div class="container-x footer-grid">
+    <div class="footer-brand">
+      <Image src={badge} alt="Semaja" width={72} height={72} class="footer-badge" />
+      <p class="footer-tag">{t.footer.tagline}</p>
+    </div>
+
+    <div class="footer-col">
+      <h3 class="footer-h">{t.location.addressTitle}</h3>
+      <p>{brand.address.street}<br />{brand.address.area}<br />{brand.address.city}</p>
+    </div>
+
+    <div class="footer-col">
+      <h3 class="footer-h">{t.location.hoursTitle}</h3>
+      {brand.hours.map((h) => <p>{lang === 'en' ? h.dEn : h.d}<br /><span class="footer-hours">{h.h}</span></p>)}
+    </div>
+
+    <div class="footer-col">
+      <h3 class="footer-h">{t.footer.contact}</h3>
+      <p>
+        <a href={waLink(lang)} target="_blank" rel="noopener" data-track="cta_click" data-section="footer" data-cta-label="reserve_whatsapp" data-lang={lang}>WhatsApp</a><br />
+        <a href={`mailto:${brand.email}`}>{brand.email}</a>
+      </p>
+      <div class="footer-social">
+        <a href={brand.social.instagram} target="_blank" rel="noopener" aria-label="Instagram" data-track="social_click" data-section="footer"><Icon name="instagram" class="w-5 h-5" /></a>
+        <a href={brand.social.tiktok} target="_blank" rel="noopener" aria-label="TikTok" data-track="social_click" data-section="footer"><Icon name="tiktok" class="w-5 h-5" /></a>
+      </div>
+    </div>
+  </div>
+
+  <div class="container-x footer-bottom">
+    <p class="footer-privacy">{t.footer.privacy}</p>
+    <p class="footer-copy">© {year} {brand.name} · {brand.group}. {t.footer.rights}</p>
+  </div>
+</footer>
+
+<style>
+  .footer { background: var(--color-forest-950); padding-top: 3rem; }
+  .footer-grid { display: grid; gap: 2rem; grid-template-columns: 1fr; padding-block: 2.6rem; }
+  .footer-badge { border-radius: 999px; }
+  .footer-tag { margin-top: 0.8rem; color: var(--color-cream-200); font-size: 0.85rem; max-width: 22ch; }
+  .footer-h { font-family: var(--font-body); font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-gold-400); margin-bottom: 0.7rem; }
+  .footer-col p { color: var(--color-cream-200); font-size: 0.92rem; margin-bottom: 0.6rem; }
+  .footer-col a:hover { color: var(--color-gold-400); }
+  .footer-hours { color: var(--color-cream-100); }
+  .footer-social { display: flex; gap: 0.6rem; margin-top: 0.8rem; color: var(--color-cream-100); }
+  .footer-social a:hover { color: var(--color-gold-400); }
+  .footer-bottom { padding-block: 1.6rem calc(2rem + env(safe-area-inset-bottom)); border-top: 1px solid rgba(230,205,154,0.1); }
+  .footer-privacy { font-size: 0.75rem; color: var(--color-cream-200); opacity: 0.7; max-width: 70ch; margin-bottom: 0.8rem; }
+  .footer-copy { font-size: 0.78rem; color: var(--color-cream-200); opacity: 0.7; }
+  @media (min-width: 700px) { .footer-grid { grid-template-columns: 1.4fr 1fr 1fr 1fr; gap: 2.5rem; } }
+</style>

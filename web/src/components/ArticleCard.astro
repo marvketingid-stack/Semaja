@@ -1,0 +1,39 @@
+---
+import { Image } from 'astro:assets';
+import { blogPostPath, useTranslations, type Lang } from '@/i18n/ui';
+import type { CollectionEntry } from 'astro:content';
+
+interface Props { entry: CollectionEntry<'articles'>; lang: Lang }
+const { entry, lang } = Astro.props;
+const t = useTranslations(lang);
+const href = blogPostPath(lang, entry.id);
+const df = new Intl.DateTimeFormat(lang === 'en' ? 'en-US' : 'id-ID', { day: 'numeric', month: 'long', year: 'numeric' });
+---
+<article class="card reveal">
+  <a href={href} class="card-link" aria-label={entry.data.title}>
+    {entry.data.cover && (
+      <div class="card-media">
+        <Image src={entry.data.cover} alt={entry.data.coverAlt} widths={[360, 560, 760]} sizes="(min-width:800px) 33vw, 90vw" format="webp" quality={70} class="card-img" />
+      </div>
+    )}
+    <div class="card-body">
+      <p class="card-date">{df.format(entry.data.pubDate)}</p>
+      <h3 class="card-title">{entry.data.title}</h3>
+      <p class="card-desc">{entry.data.description}</p>
+      <span class="card-more">{t.blog.readMore} →</span>
+    </div>
+  </a>
+</article>
+
+<style>
+  .card { border: 1px solid rgba(230,205,154,0.12); border-radius: 16px; overflow: hidden; background: rgba(255,255,255,0.02); transition: transform .35s var(--ease-out-soft), border-color .35s; }
+  .card:hover { transform: translateY(-4px); border-color: rgba(216,181,113,0.4); }
+  .card-media { aspect-ratio: 16/10; overflow: hidden; }
+  .card-img { width: 100%; height: 100%; object-fit: cover; transition: transform .6s var(--ease-out-soft); }
+  .card:hover .card-img { transform: scale(1.05); }
+  .card-body { padding: 1.2rem 1.3rem 1.4rem; }
+  .card-date { font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; color: var(--color-gold-400); }
+  .card-title { font-size: 1.3rem; color: var(--color-cream-50); margin: 0.4rem 0 0.5rem; line-height: 1.2; }
+  .card-desc { color: var(--color-cream-200); font-size: 0.92rem; }
+  .card-more { display: inline-block; margin-top: 0.9rem; color: var(--color-gold-400); font-size: 0.9rem; font-weight: 600; }
+</style>

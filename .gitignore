@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+web/node_modules/
+
+# Build output
+web/dist/
+.astro/
+web/.astro/
+
+# Env & secrets
+.env
+.env.*
+!.env.example
+
+# OS / editor
+.DS_Store
+Thumbs.db
+*.log
+
+# Raw source assets (huge originals — not needed to build the site;
+# curated/optimized copies already live in web/src/assets/)
+Asset Photo/

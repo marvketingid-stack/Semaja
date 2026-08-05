@@ -1,0 +1,19 @@
+---
+import BaseLayout from '@/layouts/BaseLayout.astro';
+import Landing from '@/components/Landing.astro';
+
+const lang = 'en' as const;
+const title = 'Semaja — Modern Indonesian Restaurant in Menteng, Jakarta | by Ismaya Group';
+const description =
+  'Semaja serves classic Nusantara dishes with a contemporary touch by Chef Glenn Erari in Menteng, Central Jakarta. Reserve easily via WhatsApp.';
+---
+<BaseLayout
+  lang={lang}
+  title={title}
+  description={description}
+  pathId="/"
+  pathEn="/"
+  ogImage="/og-default.jpg"
+>
+  <Landing lang={lang} />
+</BaseLayout>

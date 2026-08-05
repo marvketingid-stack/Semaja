@@ -1,0 +1,36 @@
+---
+import { Image } from 'astro:assets';
+import Icon from './Icon.astro';
+import badge from '@/assets/brand/logo-badge.png';
+import { useTranslations, type Lang } from '@/i18n/ui';
+
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = useTranslations(lang);
+---
+<section class="section proof">
+  <div class="container-x proof-inner reveal">
+    <Image src={badge} alt="Semaja — by Ismaya Group" width={92} height={92} class="proof-badge" />
+    <div class="proof-stars" aria-hidden="true">
+      {Array.from({ length: 5 }).map(() => <Icon name="star" class="w-5 h-5" />)}
+    </div>
+    <p class="proof-rating">{t.proof.rating}</p>
+    <blockquote class="proof-quote">{t.proof.quote}</blockquote>
+    <p class="proof-source">{t.proof.source} · <span class="proof-group">{t.proof.byGroup}</span></p>
+  </div>
+</section>
+
+<style>
+  .proof { background: var(--color-forest-900); border-block: 1px solid rgba(230,205,154,0.1); }
+  .proof-inner { text-align: center; max-width: 48rem; margin-inline: auto; }
+  .proof-badge { border-radius: 999px; margin-inline: auto; box-shadow: 0 10px 30px -10px rgba(0,0,0,.6); }
+  .proof-stars { display: flex; gap: 6px; justify-content: center; color: var(--color-gold-400); margin-top: 1.4rem; }
+  .proof-rating { margin-top: 0.7rem; font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.2em; color: var(--color-cream-200); }
+  .proof-quote {
+    font-family: var(--font-display); font-weight: 400; font-style: italic;
+    font-size: clamp(1.7rem, 4.6vw, 2.6rem); line-height: 1.3; color: var(--color-cream-50);
+    margin: 1.6rem 0 1.2rem;
+  }
+  .proof-source { font-size: 0.72rem; letter-spacing: 0.2em; text-transform: uppercase; color: var(--color-cream-200); }
+  .proof-group { color: var(--color-gold-400); }
+</style>
