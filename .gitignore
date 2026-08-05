@@ -20,3 +20,7 @@ Thumbs.db
 # Raw source assets (huge originals — not needed to build the site;
 # curated/optimized copies already live in web/src/assets/)
 Asset Photo/
+
+# Wrangler local cache
+.wrangler/
+web/.wrangler/
