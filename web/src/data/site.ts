@@ -8,7 +8,7 @@
 
 const env = import.meta.env;
 
-export const SITE_URL = (env.SITE_URL as string) || 'https://semaja.pages.dev';
+export const SITE_URL = (env.SITE_URL as string) || 'https://semaja-6xc.pages.dev';
 
 /**
  * Video hero (opsional). Taruh file di `public/videos/` lalu set path-nya di env

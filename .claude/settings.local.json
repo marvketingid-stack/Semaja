@@ -12,7 +12,14 @@
       "Bash(npm install *)",
       "Bash(npm run *)",
       "Read(//c/Users/agasi/AppData/Roaming/Claude/local-agent-mode-sessions/skills-plugin/2e3722af-2c99-4ade-8edd-8ff264ed841a/f10c257a-e9d5-40be-b3d2-7ced4f955884/skills/ui-ux-pro-max/**)",
-      "Bash(python scripts/search.py \"elegant luxury restaurant fine dining timeless\" --domain typography -n 6)"
+      "Bash(python scripts/search.py \"elegant luxury restaurant fine dining timeless\" --domain typography -n 6)",
+      "Bash(npx --yes wrangler pages deploy dist --project-name semaja --branch main --commit-dirty=true)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/)",
+      "Bash(curl -s https://semaja-6xc.pages.dev/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/sitemap-index.xml)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles/)",
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles/tracing-nusantara-flavours/)"
     ]
   }
 }

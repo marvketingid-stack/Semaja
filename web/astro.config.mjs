@@ -5,7 +5,7 @@ import tailwindcss from '@tailwindcss/vite';
 
 // Domain produksi (dipakai untuk sitemap, canonical, OG). Override lewat env SITE_URL
 // saat sudah punya subdomain final (mis. https://book.semaja.id).
-const SITE = process.env.SITE_URL || 'https://semaja.pages.dev';
+const SITE = process.env.SITE_URL || 'https://semaja-6xc.pages.dev';
 
 // https://astro.build/config
 export default defineConfig({
