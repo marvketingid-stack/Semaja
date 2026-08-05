@@ -44,9 +44,11 @@ const areas = t.space.areas.map((a, i) => ({ ...a, img: imgs[i] }));
   .space-title { font-size: clamp(2.2rem, 5.4vw, 3.6rem); margin: 0 0 1rem; }
   .space-sub { color: var(--color-ink-soft); }
   .space-row {
-    margin-top: 2.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: 82%;
-    gap: 1.1rem; overflow-x: auto; scroll-snap-type: x mandatory;
-    padding-bottom: 0.6rem; margin-inline: -1.25rem; padding-inline: 1.25rem;
+    margin-top: 2.4rem; display: grid; grid-auto-flow: column; grid-auto-columns: 78%;
+    gap: 1rem; overflow-x: auto; scroll-snap-type: x mandatory;
+    padding-bottom: 0.6rem; margin-inline: -1.5rem; padding-inline: 1.5rem;
+    /* penting: tanpa ini, scroll-snap menempelkan kartu pertama ke tepi layar */
+    scroll-padding-inline: 1.5rem;
     scrollbar-width: none;
   }
   .space-row::-webkit-scrollbar { display: none; }

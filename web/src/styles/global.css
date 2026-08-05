@@ -86,7 +86,7 @@ a { color: inherit; text-decoration: none; }
 /* ============================================================
    Layout helpers
    ============================================================ */
-.container-x { width: 100%; max-width: 1220px; margin-inline: auto; padding-inline: 1.25rem; }
+.container-x { width: 100%; max-width: 1220px; margin-inline: auto; padding-inline: 1.5rem; }
 @media (min-width: 768px) { .container-x { padding-inline: 2.5rem; } }
 
 .section { padding-block: clamp(4.5rem, 11vw, 8.5rem); position: relative; }

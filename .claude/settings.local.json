@@ -24,7 +24,9 @@
       "Bash(git remote *)",
       "Bash(git push *)",
       "Bash(git add *)",
-      "Bash(git -c 'user.name=Semaja Dev' -c user.email=dev@semaja.id commit -q -m 'CI: auto-deploy to Cloudflare Pages on push to main \\(GitHub Actions\\) *)"
+      "Bash(git -c 'user.name=Semaja Dev' -c user.email=dev@semaja.id commit -q -m 'CI: auto-deploy to Cloudflare Pages on push to main \\(GitHub Actions\\) *)",
+      "Bash(npx --yes wrangler pages deployment list --project-name semaja)",
+      "Bash(git -c user.name=\"Semaja Dev\" -c user.email=\"dev@semaja.id\" commit --allow-empty -q -m \"ci: trigger auto-deploy test\")"
     ]
   }
 }
