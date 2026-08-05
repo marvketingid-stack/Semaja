@@ -38,8 +38,8 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
       </a>
       <div class="header-cta"><ReserveButton lang={lang} label={t.nav.reserve} section="header" /></div>
       <label for="nav-toggle" class="nav-burger" aria-label={t.common.menuOpen}>
-        <Icon name="menu" class="w-6 h-6 icon-open" />
-        <Icon name="close" class="w-6 h-6 icon-close" />
+        <span class="icon-open"><Icon name="menu" class="w-6 h-6" /></span>
+        <span class="icon-close"><Icon name="close" class="w-6 h-6" /></span>
       </label>
     </div>
   </div>
@@ -81,6 +81,7 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
   .header-cta { display: none; }
 
   .nav-burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; color: var(--color-cream-50); }
+  .nav-burger .icon-open, .nav-burger .icon-close { display: inline-flex; align-items: center; }
   .nav-burger .icon-close { display: none; }
 
   .nav-toggle { position: absolute; opacity: 0; pointer-events: none; }
