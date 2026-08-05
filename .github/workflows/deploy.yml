@@ -1,0 +1,42 @@
+name: Deploy to Cloudflare Pages
+
+# Tiap push ke main → build Astro → deploy ke Cloudflare Pages project "semaja".
+# URL production tetap: https://semaja-6xc.pages.dev
+on:
+  push:
+    branches: [main]
+  workflow_dispatch: {}
+
+permissions:
+  contents: read
+  deployments: write
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: web/package-lock.json
+
+      - name: Install dependencies
+        working-directory: web
+        run: npm ci
+
+      - name: Build
+        working-directory: web
+        env:
+          SITE_URL: https://semaja-6xc.pages.dev
+        run: npm run build
+
+      - name: Deploy to Cloudflare Pages
+        uses: cloudflare/wrangler-action@v3
+        with:
+          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          accountId: 7fd28f191082ce0fc4f370c645aa2cc6
+          workingDirectory: web
+          command: pages deploy dist --project-name=semaja --branch=main

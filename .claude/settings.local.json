@@ -19,7 +19,12 @@
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/sitemap-index.xml)",
       "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles/)",
-      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles/tracing-nusantara-flavours/)"
+      "Bash(curl -s -o /dev/null -w \"HTTP %{http_code}\\\\n\" https://semaja-6xc.pages.dev/articles/tracing-nusantara-flavours/)",
+      "Bash(git config *)",
+      "Bash(git remote *)",
+      "Bash(git push *)",
+      "Bash(git add *)",
+      "Bash(git -c 'user.name=Semaja Dev' -c user.email=dev@semaja.id commit -q -m 'CI: auto-deploy to Cloudflare Pages on push to main \\(GitHub Actions\\) *)"
     ]
   }
 }
