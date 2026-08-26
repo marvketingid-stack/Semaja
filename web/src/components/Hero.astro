@@ -1,6 +1,5 @@
 ---
 import { Image } from 'astro:assets';
-import ReserveButton from './ReserveButton.astro';
 import Icon from './Icon.astro';
 import heroImg from '@/assets/photos/ambience-3.jpg';
 import { heroVideo } from '@/data/site';
@@ -9,10 +8,9 @@ import { useTranslations, homePath, type Lang } from '@/i18n/ui';
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const lines = t.hero.headline.split('\n');
 const posterUrl = heroImg.src;
 ---
-<section class="hero" aria-label={t.hero.headline.replace('\n', ' ')}>
+<section class="hero" aria-label={`${t.hero.kicker} ${t.hero.headline}`}>
   <div class="hero-media">
     {heroVideo ? (
       <video
@@ -41,22 +39,13 @@ const posterUrl = heroImg.src;
   </div>
 
   <div class="container-x hero-content">
-    <p class="eyebrow eyebrow--plain reveal">{t.hero.eyebrow}</p>
-    <h1 class="hero-title reveal">
-      {lines.map((l, i) => <span class="block">{l}{i < lines.length - 1 ? <br /> : null}</span>)}
-    </h1>
+    <p class="hero-kicker reveal">{t.hero.kicker}</p>
+    <h1 class="hero-title reveal">{t.hero.headline}</h1>
     <p class="hero-sub reveal">{t.hero.sub}</p>
-    <div class="hero-cta reveal">
-      <ReserveButton lang={lang} label={t.hero.cta} section="hero" />
-    </div>
-    <a href={`${homePath(lang)}#menu`} class="hero-menu-link reveal" data-track="cta_click" data-section="hero" data-cta-label="view_menu">
-      {t.hero.cta2}
-    </a>
   </div>
 
   <a href={`${homePath(lang)}#story`} class="hero-scroll" aria-label={t.hero.scroll}>
-    <span>{t.hero.scroll}</span>
-    <Icon name="chevron" class="w-4 h-4" />
+    <Icon name="chevron" class="w-6 h-6" />
   </a>
 </section>
 
@@ -67,36 +56,51 @@ const posterUrl = heroImg.src;
   .hero-scrim {
     position: absolute; inset: 0;
     background:
-      radial-gradient(120% 90% at 50% 40%, rgba(6,35,31,0.28), rgba(6,35,31,0.55) 70%, rgba(6,35,31,0.82) 100%),
-      linear-gradient(to top, var(--color-forest-950) 2%, transparent 30%);
+      radial-gradient(120% 90% at 50% 45%, rgba(6,35,31,0.32), rgba(6,35,31,0.55) 70%, rgba(6,35,31,0.8) 100%),
+      linear-gradient(to top, var(--color-forest-950) 2%, transparent 26%);
   }
-  .hero-content { position: relative; z-index: 2; padding-block: 7rem; max-width: 60rem; }
+  .hero-content { position: relative; z-index: 2; padding-block: 7rem; max-width: 62rem; }
+
+  /* Baris kecil ber-spasi lebar (ala "Creating the") */
+  .hero-kicker {
+    font-family: var(--font-body);
+    text-transform: uppercase;
+    letter-spacing: 0.42em;
+    text-indent: 0.42em;
+    font-size: clamp(0.8rem, 2.2vw, 1.25rem);
+    font-weight: 400;
+    color: var(--color-cream-100);
+  }
+
+  /* Kata besar italic serif (ala "Good Life") */
   .hero-title {
-    font-size: clamp(3rem, 10vw, 6.4rem);
+    font-family: var(--font-display);
+    font-style: italic;
     font-weight: 500;
+    font-size: clamp(3.6rem, 13vw, 8.5rem);
+    line-height: 0.95;
     color: var(--color-cream-50);
-    margin: 1.2rem auto 0;
+    margin: clamp(0.6rem, 1.8vw, 1.4rem) 0 0;
     text-shadow: 0 2px 50px rgba(0,0,0,0.4);
-    max-width: 16ch;
   }
-  .hero-sub { margin: 1.5rem auto 0; max-width: 52ch; font-size: clamp(1rem, 2.2vw, 1.2rem); font-weight: 300; line-height: 1.7; color: var(--color-cream-200); }
-  .hero-cta { margin-top: 2.2rem; display: flex; justify-content: center; }
-  .hero-menu-link {
-    display: inline-block; margin-top: 1.4rem;
-    font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.22em; color: var(--color-cream-200);
-    border-bottom: 1px solid rgba(230,205,154,0.35); padding-bottom: 3px; transition: color .25s, border-color .25s;
+
+  .hero-sub {
+    margin: clamp(1.6rem, 4vw, 2.4rem) auto 0;
+    max-width: 44ch;
+    font-size: clamp(1rem, 2.2vw, 1.2rem);
+    font-weight: 300;
+    line-height: 1.7;
+    color: var(--color-cream-200);
   }
-  .hero-menu-link:hover { color: var(--color-gold-400); border-color: var(--color-gold-400); }
+
   .reveal:nth-child(2) { transition-delay: .08s; }
-  .reveal:nth-child(3) { transition-delay: .16s; }
-  .reveal:nth-child(4) { transition-delay: .24s; }
-  .reveal:nth-child(5) { transition-delay: .30s; }
+  .reveal:nth-child(3) { transition-delay: .18s; }
+
   .hero-scroll {
-    position: absolute; bottom: calc(1.4rem + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
-    z-index: 2; display: none; flex-direction: column; align-items: center; gap: 4px;
-    font-size: 0.6rem; letter-spacing: 0.3em; text-transform: uppercase; color: var(--color-cream-200);
+    position: absolute; bottom: calc(1.6rem + env(safe-area-inset-bottom)); left: 50%; transform: translateX(-50%);
+    z-index: 2; display: flex; align-items: center; justify-content: center;
+    color: var(--color-cream-100);
     animation: floaty 2.4s ease-in-out infinite;
   }
-  @keyframes floaty { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,6px); } }
-  @media (min-width: 768px) { .hero-scroll { display: flex; } }
+  @keyframes floaty { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,7px); } }
 </style>

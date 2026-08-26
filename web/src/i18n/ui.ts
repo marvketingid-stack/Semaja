@@ -30,8 +30,9 @@ export const dict = {
     },
     hero: {
       eyebrow: 'Menteng · Jakarta Pusat',
-      headline: 'Penghormatan untuk\nKekayaan Nusantara',
-      sub: 'Ubah setiap santapan menjadi penjelajahan budaya — warisan kuliner Indonesia yang ditafsir ulang lewat lensa kontemporer, oleh Ismaya Group.',
+      kicker: 'Penghormatan untuk',
+      headline: 'Kekayaan Nusantara',
+      sub: 'Ubah setiap santapan menjadi penjelajahan budaya — selamat datang di Semaja.',
       cta: 'Reservasi via WhatsApp',
       cta2: 'Lihat Menu',
       scroll: 'Gulir',
@@ -127,8 +128,9 @@ export const dict = {
     },
     hero: {
       eyebrow: 'Menteng · Central Jakarta',
-      headline: 'A Tribute to Indonesia’s\nRich Heritage',
-      sub: 'Turn every meal into a cultural discovery — Indonesia’s culinary heritage reimagined through a contemporary lens, by Ismaya Group.',
+      kicker: 'A Tribute to Indonesia’s',
+      headline: 'Rich Heritage',
+      sub: 'Turn every meal into a cultural discovery — welcome to Semaja.',
       cta: 'Reserve via WhatsApp',
       cta2: 'View Menu',
       scroll: 'Scroll',
