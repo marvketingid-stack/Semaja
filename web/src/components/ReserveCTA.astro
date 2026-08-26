@@ -1,15 +1,12 @@
 ---
 import { Image } from 'astro:assets';
 import ReserveButton from './ReserveButton.astro';
-import Icon from './Icon.astro';
 import bg from '@/assets/photos/ambience-2.jpg';
-import { brand } from '@/data/site';
 import { useTranslations, type Lang } from '@/i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
-const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
 ---
 <section class="reserve-band">
   <div class="reserve-media">
@@ -22,10 +19,6 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
     <p class="reserve-sub">{t.reserve.sub}</p>
     <div class="reserve-actions">
       <ReserveButton lang={lang} label={t.reserve.cta} section="midpage" />
-      <a href={telHref} class="btn btn-ghost" data-track="cta_click" data-section="midpage" data-cta-label="call_us">
-        <Icon name="phone" class="w-5 h-5" />
-        <span>{t.reserve.call}</span>
-      </a>
     </div>
   </div>
 </section>

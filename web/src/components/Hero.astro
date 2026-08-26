@@ -3,13 +3,12 @@ import { Image } from 'astro:assets';
 import Icon from './Icon.astro';
 import heroImg from '@/assets/photos/ambience-3.jpg';
 import { heroVideo } from '@/data/site';
-import { useTranslations, homePath, mainNav, type Lang } from '@/i18n/ui';
+import { useTranslations, homePath, type Lang } from '@/i18n/ui';
 
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = useTranslations(lang);
 const posterUrl = heroImg.src;
-const nav = mainNav(lang);
 ---
 <section class="hero" aria-label={`${t.hero.kicker} ${t.hero.headline}`}>
   <div class="hero-media">
@@ -48,12 +47,6 @@ const nav = mainNav(lang);
   <a href={`${homePath(lang)}#story`} class="hero-scroll" aria-label={t.hero.scroll}>
     <Icon name="chevron" class="w-6 h-6" />
   </a>
-
-  <!-- Nav dasar hero (desktop) — link muncul di sini saat di atas, lalu pindah
-       ke header saat scroll (lihat Header.astro). -->
-  <nav class="hero-nav" aria-label="Hero">
-    {nav.map((n) => <a href={n.href} class="hero-nav-link">{n.label}</a>)}
-  </nav>
 </section>
 
 <style>
@@ -110,27 +103,4 @@ const nav = mainNav(lang);
     animation: floaty 2.4s ease-in-out infinite;
   }
   @keyframes floaty { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,7px); } }
-
-  /* Nav dasar hero — desktop saja (mobile pakai header + burger) */
-  .hero-nav { display: none; }
-  @media (min-width: 900px) {
-    .hero-nav {
-      position: absolute; z-index: 2;
-      bottom: calc(1.8rem + env(safe-area-inset-bottom));
-      left: 50%; transform: translateX(-50%);
-      display: flex; gap: clamp(1.4rem, 3.4vw, 3rem);
-      padding: 0 1.5rem; max-width: 100%;
-    }
-    .hero-nav-link {
-      font-family: var(--font-body);
-      font-size: 0.74rem; text-transform: uppercase; letter-spacing: 0.2em;
-      color: var(--color-cream-100); opacity: 0.9;
-      padding-bottom: 4px; border-bottom: 1px solid transparent;
-      transition: color .25s, border-color .25s, opacity .25s;
-      white-space: nowrap;
-    }
-    .hero-nav-link:hover { color: var(--color-gold-400); border-color: var(--color-gold-400); opacity: 1; }
-    /* chevron naik ke atas nav */
-    .hero-scroll { bottom: calc(4.8rem + env(safe-area-inset-bottom)); }
-  }
 </style>

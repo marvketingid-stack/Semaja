@@ -1,12 +1,11 @@
 ---
 import Icon from './Icon.astro';
 import ReserveButton from './ReserveButton.astro';
-import { brand } from '@/data/site';
 import { useTranslations, homePath, mainNav, type Lang } from '@/i18n/ui';
 
 interface Props {
   lang: Lang;
-  /** true di halaman dengan hero (beranda): header transparan lalu muncul saat scroll. */
+  /** true di halaman dengan hero (beranda): header transparan lalu jadi solid saat scroll. */
   overHero?: boolean;
 }
 const { lang, overHero = false } = Astro.props;
@@ -14,7 +13,6 @@ const t = useTranslations(lang);
 const home = homePath(lang);
 
 const nav = mainNav(lang);
-const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
 ---
 <header class:list={["site-header", { "over-hero": overHero }]} data-over-hero={overHero ? "true" : "false"}>
   <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
@@ -29,9 +27,6 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
     </nav>
 
     <div class="header-right">
-      <a href={telHref} class="header-phone" aria-label={brand.phoneDisplay} data-track="phone_click" data-section="header">
-        <Icon name="phone" class="w-5 h-5" />
-      </a>
       <div class="header-cta"><ReserveButton lang={lang} label={t.nav.reserve} section="header" /></div>
       <label for="nav-toggle" class="nav-burger" aria-label={t.common.menuOpen}>
         <span class="icon-open"><Icon name="menu" class="w-6 h-6" /></span>
@@ -79,13 +74,6 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
   .nav-link:hover { color: var(--color-gold-400); opacity: 1; }
 
   .header-right { display: flex; align-items: center; gap: 0.75rem; }
-  .lang-switch { display: inline-flex; align-items: center; gap: 2px; font-size: 0.72rem; font-weight: 600; letter-spacing: 0.05em; }
-  .lang-current { color: var(--color-gold-400); padding: 4px 6px; }
-  .lang-alt { color: var(--color-cream-200); opacity: 0.6; padding: 4px 6px; border-radius: 6px; }
-  .lang-alt:hover { opacity: 1; color: var(--color-gold-400); }
-
-  .header-phone { display: none; width: 44px; height: 44px; align-items: center; justify-content: center; color: var(--color-cream-100); border-radius: 999px; }
-  .header-phone:hover { color: var(--color-gold-400); }
   .header-cta { display: none; }
 
   .nav-burger { display: inline-flex; align-items: center; justify-content: center; width: 44px; height: 44px; cursor: pointer; color: var(--color-cream-50); }
@@ -108,11 +96,8 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
   .nav-toggle:checked ~ .container-x .nav-burger .icon-close { display: inline-flex; }
 
   @media (min-width: 900px) {
-    .nav-desktop { display: flex; opacity: 1; transition: opacity .3s ease, transform .3s ease; }
-    /* Beranda: sembunyikan link nav di header selama masih di hero
-       (link tampil di nav dasar hero); muncul saat header menempel di atas. */
-    .site-header.over-hero:not(.is-stuck) .nav-desktop { opacity: 0; transform: translateY(-6px); pointer-events: none; }
-    .header-phone, .header-cta { display: inline-flex; }
+    .nav-desktop { display: flex; }
+    .header-cta { display: inline-flex; }
     .nav-burger { display: none; }
     .nav-mobile { display: none; }
   }
