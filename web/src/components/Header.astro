@@ -96,6 +96,8 @@ const nav = mainNav(lang);
   .nav-toggle:checked ~ .container-x .nav-burger .icon-close { display: inline-flex; }
 
   @media (min-width: 900px) {
+    /* Desktop pakai HeroNav (nav yang mulai di dasar hero lalu menempel ke atas). */
+    .site-header { display: none; }
     .nav-desktop { display: flex; }
     .header-cta { display: inline-flex; }
     .nav-burger { display: none; }

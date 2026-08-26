@@ -103,4 +103,6 @@ const posterUrl = heroImg.src;
     animation: floaty 2.4s ease-in-out infinite;
   }
   @keyframes floaty { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,7px); } }
+  /* Desktop: chevron disembunyikan karena nav duduk di dasar hero (lihat HeroNav). */
+  @media (min-width: 900px) { .hero-scroll { display: none; } }
 </style>
