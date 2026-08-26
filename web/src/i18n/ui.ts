@@ -18,6 +18,19 @@ export const homePath = (_lang?: Lang) => '/';
 export const blogIndexPath = (_lang?: Lang) => '/articles';
 export const blogPostPath = (_lang: Lang, slug: string) => `/articles/${slug}`;
 
+/** Link nav utama — dipakai bersama oleh Header (atas) & nav dasar hero. */
+export function mainNav(lang: Lang) {
+  const t = dict[lang];
+  const home = homePath(lang);
+  return [
+    { href: `${home}#story`, label: t.nav.story },
+    { href: `${home}#menu`, label: t.nav.dishes },
+    { href: `${home}#space`, label: t.nav.space },
+    { href: `${home}#location`, label: t.nav.location },
+    { href: blogIndexPath(lang), label: t.nav.journal },
+  ];
+}
+
 export const dict = {
   id: {
     nav: {

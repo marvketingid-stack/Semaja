@@ -2,25 +2,21 @@
 import Icon from './Icon.astro';
 import ReserveButton from './ReserveButton.astro';
 import { brand } from '@/data/site';
-import { useTranslations, homePath, blogIndexPath, type Lang } from '@/i18n/ui';
+import { useTranslations, homePath, mainNav, type Lang } from '@/i18n/ui';
 
 interface Props {
   lang: Lang;
+  /** true di halaman dengan hero (beranda): header transparan lalu muncul saat scroll. */
+  overHero?: boolean;
 }
-const { lang } = Astro.props;
+const { lang, overHero = false } = Astro.props;
 const t = useTranslations(lang);
 const home = homePath(lang);
 
-const nav = [
-  { href: `${home}#story`, label: t.nav.story },
-  { href: `${home}#menu`, label: t.nav.dishes },
-  { href: `${home}#space`, label: t.nav.space },
-  { href: `${home}#location`, label: t.nav.location },
-  { href: blogIndexPath(lang), label: t.nav.journal },
-];
+const nav = mainNav(lang);
 const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
 ---
-<header class="site-header">
+<header class:list={["site-header", { "over-hero": overHero }]} data-over-hero={overHero ? "true" : "false"}>
   <input type="checkbox" id="nav-toggle" class="nav-toggle" aria-hidden="true" />
   <div class="container-x header-inner">
     <a href={home} class="brand" aria-label="Semaja — beranda">
@@ -60,6 +56,18 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
     backdrop-filter: blur(12px);
     border-bottom: 1px solid rgba(230, 205, 154, 0.12);
     padding-top: env(safe-area-inset-top);
+    transition: background-color .35s ease, backdrop-filter .35s ease, border-color .35s ease;
+  }
+  /* Di beranda: transparan saat masih di area hero, jadi solid saat scroll (is-stuck) */
+  .site-header.over-hero {
+    background: transparent;
+    backdrop-filter: none;
+    border-bottom-color: transparent;
+  }
+  .site-header.over-hero.is-stuck {
+    background: color-mix(in srgb, var(--color-forest-950) 88%, transparent);
+    backdrop-filter: blur(12px);
+    border-bottom-color: rgba(230, 205, 154, 0.12);
   }
   .header-inner { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); gap: 1rem; }
   .brand { display: flex; flex-direction: column; line-height: 1; }
@@ -100,9 +108,32 @@ const telHref = `tel:${brand.phoneDisplay.replace(/[^+\d]/g, '')}`;
   .nav-toggle:checked ~ .container-x .nav-burger .icon-close { display: inline-flex; }
 
   @media (min-width: 900px) {
-    .nav-desktop { display: flex; }
+    .nav-desktop { display: flex; opacity: 1; transition: opacity .3s ease, transform .3s ease; }
+    /* Beranda: sembunyikan link nav di header selama masih di hero
+       (link tampil di nav dasar hero); muncul saat header menempel di atas. */
+    .site-header.over-hero:not(.is-stuck) .nav-desktop { opacity: 0; transform: translateY(-6px); pointer-events: none; }
     .header-phone, .header-cta { display: inline-flex; }
     .nav-burger { display: none; }
     .nav-mobile { display: none; }
   }
 </style>
+
+<script>
+  // Beranda: header transparan di area hero, lalu menempel solid + link nav muncul
+  // saat scroll mendekati dasar hero (meniru pola ismaya.com).
+  const header = document.querySelector('.site-header.over-hero');
+  const hero = document.querySelector('.hero') as HTMLElement | null;
+  if (header && hero) {
+    let ticking = false;
+    const update = () => {
+      const threshold = Math.max(0, hero.offsetHeight - 90);
+      header.classList.toggle('is-stuck', window.scrollY > threshold);
+      ticking = false;
+    };
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    window.addEventListener('resize', update, { passive: true });
+    update();
+  }
+</script>
