@@ -38,6 +38,12 @@ const posterUrl = heroImg.src;
     <div class="hero-scrim"></div>
   </div>
 
+  <!-- Wordmark di tengah-atas hero (desktop), ala ismaya.com — ikut scroll bersama hero -->
+  <a href={homePath(lang)} class="hero-wordmark" aria-label="Semaja — beranda">
+    <span class="hero-wordmark-name font-display">SEMAJA</span>
+    <span class="hero-wordmark-tag">Modern Indonesian</span>
+  </a>
+
   <div class="container-x hero-content">
     <p class="hero-kicker reveal">{t.hero.kicker}</p>
     <h1 class="hero-title reveal">{t.hero.headline}</h1>
@@ -105,4 +111,22 @@ const posterUrl = heroImg.src;
   @keyframes floaty { 0%,100% { transform: translate(-50%,0); } 50% { transform: translate(-50%,7px); } }
   /* Desktop: chevron disembunyikan karena nav duduk di dasar hero (lihat HeroNav). */
   @media (min-width: 900px) { .hero-scroll { display: none; } }
+
+  /* Wordmark tengah-atas (desktop) */
+  .hero-wordmark { display: none; }
+  @media (min-width: 900px) {
+    .hero-wordmark {
+      display: flex; flex-direction: column; align-items: center; text-align: center;
+      position: absolute; top: 1.7rem; left: 50%; transform: translateX(-50%);
+      z-index: 3; line-height: 1;
+    }
+    .hero-wordmark-name {
+      font-size: 1.9rem; font-weight: 600; letter-spacing: 0.34em; text-indent: 0.34em;
+      color: var(--color-gold-400); text-shadow: 0 1px 18px rgba(0,0,0,.45);
+    }
+    .hero-wordmark-tag {
+      font-size: 0.56rem; letter-spacing: 0.42em; text-indent: 0.42em; text-transform: uppercase;
+      color: var(--color-cream-200); margin-top: 6px;
+    }
+  }
 </style>

@@ -40,7 +40,10 @@ const nav = mainNav(lang);
       border-bottom-color: rgba(230, 205, 154, 0.14);
     }
     .hero-nav-inner { display: flex; align-items: center; justify-content: space-between; height: var(--header-h); gap: 1rem; }
-    .hero-nav-brand { font-size: 1.7rem; font-weight: 600; letter-spacing: 0.32em; text-indent: 0.32em; color: var(--color-gold-400); }
+    .hero-nav-brand { font-size: 1.7rem; font-weight: 600; letter-spacing: 0.32em; text-indent: 0.32em; color: var(--color-gold-400); transition: opacity .3s ease; }
+    /* Wordmark di bar hanya tampil saat sudah menempel di atas — di dasar hero
+       wordmark yang dipakai adalah yang center (lihat Hero.astro), supaya tak dobel. */
+    .hero-nav:not(.is-stuck) .hero-nav-brand { opacity: 0; visibility: hidden; }
     .hero-nav-links { display: flex; gap: 2rem; }
     .hero-nav-link { font-size: 0.72rem; text-transform: uppercase; letter-spacing: 0.18em; color: var(--color-cream-100); opacity: 0.88; transition: color .2s, opacity .2s; text-shadow: 0 1px 12px rgba(0,0,0,.35); }
     .hero-nav-link:hover { color: var(--color-gold-400); opacity: 1; }

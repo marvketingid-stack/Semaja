@@ -28,7 +28,8 @@
       "Bash(npx --yes wrangler pages deployment list --project-name semaja)",
       "Bash(git -c user.name=\"Semaja Dev\" -c user.email=\"dev@semaja.id\" commit --allow-empty -q -m \"ci: trigger auto-deploy test\")",
       "Bash(git rm *)",
-      "Bash(git -c user.name=\"Semaja Dev\" -c user.email=\"dev@semaja.id\" commit -q -m \"chore: gitignore wrangler local cache\")"
+      "Bash(git -c user.name=\"Semaja Dev\" -c user.email=\"dev@semaja.id\" commit -q -m \"chore: gitignore wrangler local cache\")",
+      "Bash(curl -s \"https://semaja-6xc.pages.dev/?v=9\")"
     ]
   }
 }
